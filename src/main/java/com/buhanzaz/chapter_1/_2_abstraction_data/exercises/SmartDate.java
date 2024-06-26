@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public class SmartDate implements Comparable<SmartDate> {
     private static final int[] DAYS = {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    //private static final int commonYears;
 
     private final int month;   // month (between 1 and 12)
     private final int day;     // day   (between 1 and DAYS[month]
@@ -54,7 +55,7 @@ public class SmartDate implements Comparable<SmartDate> {
 
     // algorithm Rata Die
     public int dayOfTheWeek() {
-        LocalDateTime
+        return 0;
     }
 
     private int gaussAlgorithm() {
