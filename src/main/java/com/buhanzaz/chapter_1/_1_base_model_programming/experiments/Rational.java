@@ -44,21 +44,27 @@ public class Rational {
         int newDenominator = this.denominator * b.denominator;
 
         if (isAbbreviated(newNumerator, newDenominator)) {
-            int factor = getMaxFactors(newNumerator, newDenominator);
-            return new Rational(newNumerator / factor, newDenominator / factor);
-        } else {
-            return new Rational(newNumerator, newDenominator);
+            return createShortenedFraction(newNumerator, newDenominator);
         }
 
+        return new Rational(newNumerator, newDenominator);
+    }
+
+    public Rational divides(Rational b) {
+        int newNumerator = this.numerator * b.denominator;
+        int newDenominator = this.denominator * b.denominator;
+
+        if (isAbbreviated(newNumerator, newDenominator)) {
+            return createShortenedFraction(newNumerator, newDenominator);
+        }
+
+        return new Rational(newNumerator, newDenominator);
     }
 
     private boolean isAbbreviated(int a, int b) {
         return (a % 2 == 0 && b % 2 == 0) || (a % 2 != 0 && b % 2 != 0);
     }
 
-    public Rational divides(Rational b) {
-        return new Rational(this.numerator * b.denominator, this.denominator * b.numerator);
-    }
 
     private int getMaxFactors(int firstInt, int secondInt) {
         Set<Integer> factors = new HashSet<>();
@@ -67,7 +73,6 @@ public class Rational {
         for (int i = 1; i < Math.sqrt(Math.min(firstInt, secondInt)); i += step) {
             if (secondInt % i == 0 && firstInt % i == 0) {
                 factors.add(i);
-                factors.add(secondInt / i);
             }
         }
 
@@ -79,11 +84,41 @@ public class Rational {
     }
 
     private Rational createShortenedFraction(int numerator, int denominator) {
+        int newNumerator;
+        int newDenominator;
         if (!isAbbreviated(numerator, denominator)) {
             return new Rational(numerator, denominator);
         } else {
             int divider = getMaxFactors(numerator, denominator);
-            return new Rational(numerator / divider, denominator / divider);
+            newNumerator = numerator / divider;
+            newDenominator = denominator / divider;
+            return new Rational(newNumerator, newDenominator);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rational rational = (Rational) o;
+        return this.numerator == rational.numerator && this.denominator == rational.denominator;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.numerator, this.denominator);
+    }
+
+    @Override
+    public String toString() {
+        return "%d\n--\n%d".formatted(this.numerator, this.denominator);
+    }
+
+    public static void main(String[] args) {
+        Rational rational = new Rational(1, 2);
+        Rational rational2 = new Rational(3, 4);
+        Rational rational3 = rational.plus(rational2);
+        System.out.println(rational3);
+        System.out.println(rational);
     }
 }
